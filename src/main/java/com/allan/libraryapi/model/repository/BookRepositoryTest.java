@@ -40,13 +40,10 @@ public class BookRepositoryTest {
     @Test
     @DisplayName("Deve retornar falso quando existir um livro na base com o isbn informado.")
     public void returnTrueWhenIsbnDoesntExists() {
-
         String isbn = "123";
         boolean exists = repository.existsByIsbn(isbn);
 
         assertThat(exists).isFalse();
-
-
     }
 
 }
