@@ -28,16 +28,26 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> getById(Long id) {
-        return Optional.empty();
+        return this.bookRepository.findById(id);
     }
 
     @Override
     public void delete(Book book) {
+        if(book == null || book.getId() == null) {
+            throw new IllegalArgumentException("Book ID should be different of null");
+        }
 
+        this.bookRepository.delete(book);
     }
 
     @Override
     public Book update(Book book) {
-        return null;
+        if(book == null || book.getIsbn() == null) {
+            throw new IllegalArgumentException("Book ID should be different of null");
+        }
+
+        //se ja existir o livro, o save se comporta como update
+        //caso contrario, cria novo livro
+        return  this.bookRepository.save(book);
     }
 }

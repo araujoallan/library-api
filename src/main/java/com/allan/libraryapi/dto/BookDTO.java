@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
+@Data
 @Getter
 @Setter
 @Builder
