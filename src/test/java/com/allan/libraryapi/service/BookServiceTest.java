@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
@@ -139,4 +140,40 @@ public class BookServiceTest {
         Mockito.verify(bookRepository, Mockito.never()).delete(book);
     }
 
+    @Test
+    @DisplayName("Deve ocorrer erro ao tentar atualizar um livro.")
+    public void updateInvalidBookTest() {
+        Book book = new Book();
+
+        //execucao
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> bookService.update(book));
+
+        //validacao
+        Mockito.verify(bookRepository, Mockito.never()).delete(book);
+    }
+
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void updateBookTest() {
+        //cenario
+        Long id = 1l;
+
+        //livro para atualizar
+        Book updatingBook = Book.builder().id(id).build();
+
+        //simulando atualizacao
+        Book updatedBook = this.createValidBook();
+        updatedBook.setId(id);
+
+        Mockito.when(bookRepository.save(updatingBook)).thenReturn(updatedBook);
+
+        //execucao
+        Book book = bookService.update(updatingBook);
+
+        //verificacao
+        assertThat(book.getId()).isEqualTo(updatedBook.getId());
+        assertThat(book.getAuthor()).isEqualTo(updatedBook.getAuthor());
+        assertThat(book.getTitle()).isEqualTo(updatedBook.getTitle());
+        assertThat(book.getIsbn()).isEqualTo(updatedBook.getIsbn());
+    }
 }

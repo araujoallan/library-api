@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book update(Book book) {
-        if(book == null || book.getIsbn() == null) {
+        if(book == null || book.getId() == null) {
             throw new IllegalArgumentException("Book ID should be different of null");
         }
 
