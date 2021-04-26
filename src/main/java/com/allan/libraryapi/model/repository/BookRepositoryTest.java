@@ -79,4 +79,14 @@ public class BookRepositoryTest {
         assertThat(deletedBook).isNull();
 
     }
+
+    @Test
+    @DisplayName("Deve salvar um livro na base")
+    public void saveBookTest() {
+        Book book = createNewBook("123");
+
+        Book savedBook = repository.save(book);
+
+        assertThat(savedBook.getId()).isNotNull();
+    }
 }
