@@ -4,6 +4,10 @@ import com.allan.libraryapi.exception.BusinessException;
 import com.allan.libraryapi.model.entity.Book;
 import com.allan.libraryapi.model.repository.BookRepository;
 import com.allan.libraryapi.service.BookService;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -42,12 +46,25 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book update(Book book) {
-        if(book == null || book.getIsbn() == null) {
+        if(book == null || book.getId() == null) {
             throw new IllegalArgumentException("Book ID should be different of null");
         }
 
         //se ja existir o livro, o save se comporta como update
         //caso contrario, cria novo livro
         return  this.bookRepository.save(book);
+    }
+
+    @Override
+    public Page<Book> find(Book filter, Pageable pageRequest) {
+        Example example = Example.of(filter,
+            ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+        );
+
+        return bookRepository.findAll(example, pageRequest);
     }
 }
